@@ -100,7 +100,7 @@ function checkDupe(item, number) {
             
         }
         if (count == number) {
-            console.log(item);
+            //console.log(item);
             return 1;
         }
         x = 0;
@@ -150,5 +150,5 @@ function findSame(inputArray) {
 
         }
     }
-    console.log(finalString);
+    console.log("Common Letters: " + finalString);
 }
