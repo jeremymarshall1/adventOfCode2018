@@ -78,6 +78,8 @@ fs.readFile('./input/day2.txt', 'utf8', function (err,data) {
   console.log("Two: " + Two);
   console.log("Three: " + Three);
   console.log("Checksum: " + Two * Three);
+  let finalIDs = correctIDs(inputArray);
+  findSame(finalIDs);
 
 })
 
@@ -108,4 +110,45 @@ function checkDupe(item, number) {
 
     return 0
     
+}
+
+function correctIDs(inputArray) {
+    inputArray.sort();
+    let finalIDs = [];
+    let test;// = inputArray.shift();
+    while((test = inputArray.shift()) != undefined) {
+        for(x = 0; x < inputArray.length; x++){
+            let lambda = 0
+    
+            for (y = 0; y < test.length; y++) {
+                //console.log(test + " " + inputArray[x]);
+
+                //ghetto
+                if (test[y] != inputArray[x][y]) {
+                    lambda++;
+                }
+            }
+            if (lambda == 1){
+                finalIDs.push(test);
+                finalIDs.push(inputArray[x]);
+            }
+            //test = inputArray.shift();
+        }
+    
+    }
+
+    return finalIDs;
+
+
+}
+
+function findSame(inputArray) {
+    let finalString ="";
+    for (x = 0; x < inputArray[0].length; x++) {
+        if (inputArray[0][x] == inputArray[1][x]) {
+            finalString += inputArray[0][x];
+
+        }
+    }
+    console.log(finalString);
 }
