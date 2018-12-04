@@ -71,12 +71,14 @@ fs.readFile('./input/day2.txt', 'utf8', function (err, data) {
     let inputArray = data.split("\r\n");
     let Two = 0;
     let Three = 0;
-    let finalIDs = correctIDs(inputArray);
+    let finalIDs = [];
 
     inputArray.forEach(element => {
         Two += checkDupe(element, 2);
         Three += checkDupe(element, 3);
     });
+    
+    finalIDs = correctIDs(inputArray);
 
     console.log("Two: " + Two);
     console.log("Three: " + Three);
@@ -113,16 +115,16 @@ function correctIDs(inputArray) {
     let test;
     while ((test = inputArray.shift()) != undefined) {
         for (x = 0; x < inputArray.length; x++) {
-            let lambda = 0
+            let delta = 0
 
             for (y = 0; y < test.length; y++) {
 
                 if (test[y] != inputArray[x][y]) {
-                    lambda++;
+                    delta++;
                 }
             }
 
-            if (lambda == 1) {
+            if (delta == 1) {
                 finalIDs.push(test);
                 finalIDs.push(inputArray[x]);
             }
