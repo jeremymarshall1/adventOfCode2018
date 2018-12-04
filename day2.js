@@ -64,22 +64,24 @@ this is found by removing the differing character from either ID, producing fgij
 */
 
 fs = require('fs')
-fs.readFile('./input/day2.txt', 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  let inputArray = data.split("\r\n");
-  let Two = 0;
-  let Three = 0;
-  inputArray.forEach(element => {
-      Two += checkDupe(element, 2);
-      Three += checkDupe(element, 3);
-  });
-  console.log("Two: " + Two);
-  console.log("Three: " + Three);
-  console.log("Checksum: " + Two * Three);
-  let finalIDs = correctIDs(inputArray);
-  findSame(finalIDs);
+fs.readFile('./input/day2.txt', 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+    let inputArray = data.split("\r\n");
+    let Two = 0;
+    let Three = 0;
+    let finalIDs = correctIDs(inputArray);
+
+    inputArray.forEach(element => {
+        Two += checkDupe(element, 2);
+        Three += checkDupe(element, 3);
+    });
+
+    console.log("Two: " + Two);
+    console.log("Three: " + Three);
+    console.log("Checksum: " + Two * Three);
+    findSame(finalIDs);
 
 })
 
@@ -88,66 +90,52 @@ function checkDupe(item, number) {
     let count = 1
 
     charArray.sort();
-    
-    for (x = 0; x < charArray.length; x++) {
-        //charArray.forEach(element => {
 
+    for (x = 0; x < charArray.length; x++) {
         let check = charArray.shift();
-        
+
         while (charArray.includes(check)) {
             charArray.splice(0, 1);
             count++;
-            
         }
         if (count == number) {
-            //console.log(item);
             return 1;
         }
         x = 0;
         count = 1;
     }
-
-
     return 0
-    
 }
 
 function correctIDs(inputArray) {
     inputArray.sort();
     let finalIDs = [];
-    let test;// = inputArray.shift();
-    while((test = inputArray.shift()) != undefined) {
-        for(x = 0; x < inputArray.length; x++){
+    let test;
+    while ((test = inputArray.shift()) != undefined) {
+        for (x = 0; x < inputArray.length; x++) {
             let lambda = 0
-    
-            for (y = 0; y < test.length; y++) {
-                //console.log(test + " " + inputArray[x]);
 
-                //ghetto
+            for (y = 0; y < test.length; y++) {
+
                 if (test[y] != inputArray[x][y]) {
                     lambda++;
                 }
             }
-            if (lambda == 1){
+
+            if (lambda == 1) {
                 finalIDs.push(test);
                 finalIDs.push(inputArray[x]);
             }
-            //test = inputArray.shift();
         }
-    
     }
-
     return finalIDs;
-
-
 }
 
 function findSame(inputArray) {
-    let finalString ="";
+    let finalString = "";
     for (x = 0; x < inputArray[0].length; x++) {
         if (inputArray[0][x] == inputArray[1][x]) {
             finalString += inputArray[0][x];
-
         }
     }
     console.log("Common Letters: " + finalString);
