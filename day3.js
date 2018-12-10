@@ -53,25 +53,51 @@ The four square inches marked with X are claimed by both 1 and 2. (Claim 3, whil
 
 If the Elves all proceed with their own plans, none of them will have enough fabric. 
 How many square inches of fabric are within two or more claims?
+
+--- Part Two ---
+Amidst the chaos, you notice that exactly one claim doesn't overlap by even a single 
+square inch of fabric with any other claim. If you can somehow draw attention to it, 
+maybe the Elves will be able to make Santa's suit after all!
+
+For example, in the claims above, only claim 3 is intact after all claims are made.
+
+What is the ID of the only claim that doesn't overlap?
+
 */
 
 let input = readInput("./input/day3.txt");
 let inputArray = input.split("\n");
 let parsedInput = parseInput(inputArray);
 let fabric = constructFabric();
+let unclaimed = [];
 
 console.log(parsedInput);
 
-assignClaims(fabric, parsedInput);
+assignClaims(fabric, parsedInput, unclaimed);
 
 console.log("Number of overlapping claims: " + countOverlap(fabric));
+console.log("Uncontested claim: " + unclaimed);
+
+function findUnclaimed(matrix) {
+    let xPos = 0;
+    let yPos = 0;
+    matrix.forEach(elementX => {
+        elementX.forEach(elementY => {
+            if (elementY != "X" && elementY != ".") {
+                return (xPos + "," + yPos);
+            }
+            yPos++;
+        })
+        xPos++
+    })
+}
 
 function countOverlap(matrix) {
     let count = 0;
 
     matrix.forEach(elementX => {
         elementX.forEach(elementY => {
-            if (elementY == "X"){
+            if (elementY == "X") {
                 count++;
             }
         })
@@ -80,7 +106,7 @@ function countOverlap(matrix) {
     return count;
 }
 
-function assignClaims(matrix, input) {
+function assignClaims(matrix, input, unclaimed) {
     let initX, initY, sizeX, sizeY;
 
     let splitInput = [];
@@ -92,16 +118,30 @@ function assignClaims(matrix, input) {
         initY = parseInt(splitInput[3]);
         sizeX = parseInt(splitInput[4]);
         sizeY = parseInt(splitInput[5]);
+        let claimed = false;
 
-        for(x = initX; x < (initX + sizeX); x++){
-            for(y = initY; y < (initY + sizeY); y++){
-                if (fabric[x][y] == ".") {
-                    fabric[x][y] = splitInput[0];
+        for (x = initX; x < (initX + sizeX); x++) {
+            for (y = initY; y < (initY + sizeY); y++) {
+                if (matrix[x][y] == ".") {
+                    matrix[x][y] = splitInput[0];
+
                 } else {
-                    fabric[x][y] = 'X';
+                    claimed = true;
+                    if (unclaimed.includes(matrix[x][y])) {
+                        unclaimed.splice(unclaimed.indexOf(matrix[x][y]), 1);
+
+                    }
+                    matrix[x][y] = 'X';
+
                 }
-                
+
+
             }
+        }
+        if (!claimed) {
+            unclaimed.push(splitInput[0]);
+        } else if (unclaimed.includes(splitInput[0])) {
+            unclaimed.splice(unclaimed.indexOf(splitInput[0]), 1);
         }
     })
 
@@ -115,13 +155,13 @@ function constructFabric() {
         fabric[x] = new Array(1000);
         fabric[x].fill(".");
     }
-    
+
 
     return fabric;
 }
 
 function parseInput(input) {
-    let parsedInput= [];
+    let parsedInput = [];
 
     input.forEach(element => {
         element = element.replace("#", "");
