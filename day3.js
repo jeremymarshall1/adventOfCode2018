@@ -1,9 +1,9 @@
 /*
 --- Day 3: No Matter How You Slice It ---
 The Elves managed to locate the chimney-squeeze prototype fabric for Santa's suit (thanks 
-    to someone who helpfully wrote its box IDs on the wall of the warehouse in the middle 
-    of the night). Unfortunately, anomalies are still affecting them - nobody can even 
-    agree on how to cut the fabric.
+to someone who helpfully wrote its box IDs on the wall of the warehouse in the middle 
+of the night). Unfortunately, anomalies are still affecting them - nobody can even 
+agree on how to cut the fabric.
 
 The whole piece of fabric they're working on is a very large square - at least 1000 
 inches on each side.
@@ -55,7 +55,7 @@ If the Elves all proceed with their own plans, none of them will have enough fab
 How many square inches of fabric are within two or more claims?
 */
 
-let input = readInput("./input/day3test.txt");
+let input = readInput("./input/day3.txt");
 let inputArray = input.split("\n");
 let parsedInput = parseInput(inputArray);
 let fabric = constructFabric();
@@ -64,7 +64,47 @@ console.log(parsedInput);
 
 assignClaims(fabric, parsedInput);
 
+console.log("Number of overlapping claims: " + countOverlap(fabric));
+
+function countOverlap(matrix) {
+    let count = 0;
+
+    matrix.forEach(elementX => {
+        elementX.forEach(elementY => {
+            if (elementY == "X"){
+                count++;
+            }
+        })
+    })
+
+    return count;
+}
+
 function assignClaims(matrix, input) {
+    let initX, initY, sizeX, sizeY;
+
+    let splitInput = [];
+
+    input.forEach(element => {
+        splitInput = element.toString().split(" ");
+        //console.log(splitInput);
+        initX = parseInt(splitInput[2]);
+        initY = parseInt(splitInput[3]);
+        sizeX = parseInt(splitInput[4]);
+        sizeY = parseInt(splitInput[5]);
+
+        for(x = initX; x < (initX + sizeX); x++){
+            for(y = initY; y < (initY + sizeY); y++){
+                if (fabric[x][y] == ".") {
+                    fabric[x][y] = splitInput[0];
+                } else {
+                    fabric[x][y] = 'X';
+                }
+                
+            }
+        }
+    })
+
 
 }
 
@@ -73,8 +113,9 @@ function constructFabric() {
 
     for (x = 0; x < 1000; x++) {
         fabric[x] = new Array(1000);
+        fabric[x].fill(".");
     }
-    fabric.fill(".");
+    
 
     return fabric;
 }
