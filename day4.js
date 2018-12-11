@@ -98,12 +98,17 @@ function parseEvents(input){
     input.forEach(element => {
         if (element.desc.includes("Guard")){
             let guard = {};
-            guard.time = [];
-            guard.action =[];
+            guard.events = [];
             guard.name = element.desc.replace(" begins shift", "");
-            guard.time = element.time;
-            guard.action = element.desc.splice(-13);
         }
+        let event = {};
+        event.time = element.time;
+        event.action = element.desc.slice(-13);
+        events.push(event);
+
+        guards.push(guard);
+
+
     })
 }
 
