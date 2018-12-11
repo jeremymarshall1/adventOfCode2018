@@ -71,7 +71,7 @@ let parsedInput = parseInput(inputArray);
 let fabric = constructFabric();
 let unclaimed = [];
 
-console.log(parsedInput);
+//console.log(parsedInput);
 
 assignClaims(fabric, parsedInput, unclaimed);
 
