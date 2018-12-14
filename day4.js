@@ -92,24 +92,62 @@ guardEvents.sort(function(a,b) {
 
 //console.log(guardEvents);
 
-parseEvents(guardEvents);
+guards = parseEvents(guardEvents);
+
+calculateSleepTime(guards);
+
+console.log(guards);
+
+function calculateSleepTime(input){
+    input.forEach(singleGuard=> {
+        let totalSleepTime = 0;
+        let sleepStart;
+        singleGuard.actions.forEach(action => {
+            if(action[0] == "falls asleep"){
+                sleepStart = action[1];
+            } else if (action[0] == "wakes up"){
+                totalSleepTime += action[1] - sleepStart;
+            }
+        })
+        singleGuard.totalSleepTime = totalSleepTime;
+    })
+}
 
 function parseEvents(input){
+    let guard = {actions: []};
+    let guards = [];
+    
     input.forEach(element => {
-        if (element.desc.includes("Guard")){
-            let guard = {};
-            guard.events = [];
-            guard.name = element.desc.replace(" begins shift", "");
+        let action = [];
+        let guard = {actions: []};
+        if(element.desc.includes("Guard")) {
+            if( guards.length == 0) {
+                guard.name = element.desc.slice(0, -13)
+                action.push(element.desc.slice(-13))
+                action.push(element.time);
+                guard.actions.push(action);
+                guards.push(guard);
+            } else {
+/*                 guards.forEach(item => {
+                    if (item.name == element.desc.slice(0, -13)) {
+                        guard = item;
+                        break;
+
+                    } else {
+                        guard.name == element.desc.slice(0, -13)
+                        guards.push(guard);
+                    }
+                }) */
+            }
+            
         }
-        let event = {};
-        event.time = element.time;
-        event.action = element.desc.slice(-13);
-        events.push(event);
-
-        guards.push(guard);
-
-
+        action.push(element.desc.slice(-13))
+        action.push(element.time);
+        guard.actions.push(action);
+        //guards.push(guard);
+        
     })
+    return guards;
 }
 
 
